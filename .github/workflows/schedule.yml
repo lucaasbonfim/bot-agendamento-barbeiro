@@ -1,0 +1,65 @@
+name: Agendar barbeiro
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub Actions usa UTC. Sabado 02:50 UTC = sexta 23:50 em America/Sao_Paulo.
+    # Evite minuto 00 porque horarios cheios podem atrasar mais.
+    - cron: '50 2 * * 6'
+
+concurrency:
+  group: barber-booking-bot
+  cancel-in-progress: false
+
+jobs:
+  book:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run booking bot
+        run: npm run bot
+        env:
+          BOOKING_URL: ${{ secrets.BOOKING_URL }}
+          BARBER_USERNAME: ${{ secrets.BARBER_USERNAME }}
+          BARBER_PASSWORD: ${{ secrets.BARBER_PASSWORD }}
+          CUSTOMER_NAME: ${{ secrets.CUSTOMER_NAME }}
+          CUSTOMER_PHONE: ${{ secrets.CUSTOMER_PHONE }}
+          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+          BRANCH_NAME: ${{ vars.BRANCH_NAME || 'Imbariê' }}
+          PROFESSIONAL_NAME: ${{ vars.PROFESSIONAL_NAME || 'Weslley gomes' }}
+          SERVICE_NAME: ${{ vars.SERVICE_NAME || 'Corte de cabelo' }}
+          PREFERRED_DATE: ${{ vars.PREFERRED_DATE }}
+          PREFERRED_TIME: ${{ vars.PREFERRED_TIME || '11:00' }}
+          FALLBACK_AFTER_TIME: ${{ vars.FALLBACK_AFTER_TIME || '16:30' }}
+          BOOKING_DAYS_AHEAD: ${{ vars.BOOKING_DAYS_AHEAD || '7' }}
+          TARGET_WEEKDAY: ${{ vars.TARGET_WEEKDAY || 'friday' }}
+          TIMEZONE: ${{ vars.TIMEZONE || 'America/Sao_Paulo' }}
+          WAIT_UNTIL_TIME: ${{ vars.WAIT_UNTIL_TIME || '00:00' }}
+          WAIT_GRACE_MINUTES: ${{ vars.WAIT_GRACE_MINUTES || '5' }}
+          WAIT_MAX_MINUTES: ${{ vars.WAIT_MAX_MINUTES || '15' }}
+          DRY_RUN: ${{ vars.DRY_RUN || 'false' }}
+          HEADLESS: 'true'
+
+      - name: Upload artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: booking-artifacts
+          path: artifacts/
+          retention-days: 7
