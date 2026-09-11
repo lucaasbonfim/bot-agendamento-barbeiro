@@ -2,6 +2,23 @@ name: Agendar barbeiro
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Rodar sem confirmar o agendamento?'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      skip_wait:
+        description: 'Ignorar espera ate 00:00?'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
   schedule:
     # GitHub Actions usa UTC. Sabado 02:50 UTC = sexta 23:50 em America/Sao_Paulo.
     # Evite minuto 00 porque horarios cheios podem atrasar mais.
@@ -53,8 +70,8 @@ jobs:
           WAIT_UNTIL_TIME: ${{ vars.WAIT_UNTIL_TIME || '00:00' }}
           WAIT_GRACE_MINUTES: ${{ vars.WAIT_GRACE_MINUTES || '5' }}
           WAIT_MAX_MINUTES: ${{ vars.WAIT_MAX_MINUTES || '15' }}
-          SKIP_WAIT: ${{ vars.SKIP_WAIT || 'false' }}
-          DRY_RUN: ${{ vars.DRY_RUN || 'false' }}
+          SKIP_WAIT: ${{ github.event_name == 'workflow_dispatch' && inputs.skip_wait || vars.SKIP_WAIT || 'false' }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || vars.DRY_RUN || 'false' }}
           HEADLESS: 'true'
 
       - name: Upload artifacts

@@ -126,19 +126,23 @@ Assim ele para antes de confirmar e salva screenshot em `artifacts/`.
 
 ## Teste manual no GitHub Actions
 
-Para rodar pelo botão `Run workflow` sem esperar meia-noite e sem confirmar o agendamento, crie estas variables em `Settings > Secrets and variables > Actions > Variables`:
+Para rodar pelo botão `Run workflow`, escolha os inputs:
 
 ```env
 DRY_RUN=true
 SKIP_WAIT=true
 ```
 
-Depois do teste, remova essas variables ou volte para:
+Isso roda sem esperar meia-noite e sem confirmar o agendamento.
+
+Para um teste manual que confirma de verdade, use:
 
 ```env
 DRY_RUN=false
-SKIP_WAIT=false
+SKIP_WAIT=true
 ```
+
+O agendamento automático de sexta usa os defaults de produção do workflow, sem precisar preencher inputs.
 
 ## Produção
 
