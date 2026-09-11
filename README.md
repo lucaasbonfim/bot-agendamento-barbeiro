@@ -86,6 +86,7 @@ TIMEZONE=America/Sao_Paulo
 WAIT_UNTIL_TIME=00:00
 WAIT_GRACE_MINUTES=5
 WAIT_MAX_MINUTES=15
+SKIP_WAIT=false
 DRY_RUN=false
 HEADLESS=true
 ```
@@ -122,6 +123,22 @@ DRY_RUN=true
 ```
 
 Assim ele para antes de confirmar e salva screenshot em `artifacts/`.
+
+## Teste manual no GitHub Actions
+
+Para rodar pelo botão `Run workflow` sem esperar meia-noite e sem confirmar o agendamento, crie estas variables em `Settings > Secrets and variables > Actions > Variables`:
+
+```env
+DRY_RUN=true
+SKIP_WAIT=true
+```
+
+Depois do teste, remova essas variables ou volte para:
+
+```env
+DRY_RUN=false
+SKIP_WAIT=false
+```
 
 ## Produção
 
