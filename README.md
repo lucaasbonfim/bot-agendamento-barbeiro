@@ -70,6 +70,16 @@ Opcional:
 NOTIFY_WEBHOOK_URL=
 ```
 
+Para receber email de sucesso/erro, cadastre também:
+
+```text
+EMAIL_SMTP_USER=seu_email@gmail.com
+EMAIL_SMTP_PASS=sua_senha_de_app
+EMAIL_TO=email_que_vai_receber
+```
+
+Se usar Gmail, `EMAIL_SMTP_PASS` deve ser uma senha de app do Google. Não use sua senha normal da conta.
+
 ## Defaults importantes
 
 No GitHub Actions, se você não cadastrar variables, o workflow usa:
@@ -89,6 +99,14 @@ WAIT_MAX_MINUTES=15
 SKIP_WAIT=false
 DRY_RUN=false
 HEADLESS=true
+```
+
+Email usa Gmail por padrão:
+
+```env
+EMAIL_SMTP_HOST=smtp.gmail.com
+EMAIL_SMTP_PORT=465
+EMAIL_SMTP_SECURE=true
 ```
 
 `DRY_RUN=false` no Actions significa que ele confirma o agendamento de verdade.

@@ -58,6 +58,13 @@ jobs:
           CUSTOMER_NAME: ${{ secrets.CUSTOMER_NAME }}
           CUSTOMER_PHONE: ${{ secrets.CUSTOMER_PHONE }}
           NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+          EMAIL_SMTP_HOST: ${{ vars.EMAIL_SMTP_HOST || 'smtp.gmail.com' }}
+          EMAIL_SMTP_PORT: ${{ vars.EMAIL_SMTP_PORT || '465' }}
+          EMAIL_SMTP_SECURE: ${{ vars.EMAIL_SMTP_SECURE || 'true' }}
+          EMAIL_SMTP_USER: ${{ secrets.EMAIL_SMTP_USER }}
+          EMAIL_SMTP_PASS: ${{ secrets.EMAIL_SMTP_PASS }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
           BRANCH_NAME: ${{ vars.BRANCH_NAME || 'Imbariê' }}
           PROFESSIONAL_NAME: ${{ vars.PROFESSIONAL_NAME || 'Weslley gomes' }}
           SERVICE_NAME: ${{ vars.SERVICE_NAME || 'Corte de cabelo' }}

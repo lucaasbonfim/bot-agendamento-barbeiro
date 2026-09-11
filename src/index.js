@@ -30,14 +30,15 @@ const main = async () => {
     waitMaxMinutes: config.waitMaxMinutes,
     skipWait: config.skipWait,
     dryRun: config.dryRun,
-    headless: config.headless
+    headless: config.headless,
+    emailEnabled: Boolean(config.emailTo && config.emailSmtpUser && config.emailSmtpPass)
   });
 
   await waitUntilConfiguredTime(config);
 
   const result = await runBookingBot(config);
 
-  await notify(config.notifyWebhookUrl, `[${result.status}] ${result.details}`);
+  await notify(config, `[${result.status}] ${result.details}`);
 };
 
 main().catch(async (error) => {
@@ -50,7 +51,7 @@ main().catch(async (error) => {
 
   try {
     const config = loadConfig();
-    await notify(config.notifyWebhookUrl, `[erro] ${message}`);
+    await notify(config, `[erro] ${message}`);
   } catch {
     // Sem config valida, apenas falha o processo.
   }

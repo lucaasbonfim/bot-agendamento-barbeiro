@@ -62,6 +62,13 @@ export const loadConfig = () => {
     skipWait: booleanEnv('SKIP_WAIT', false),
     dryRun: booleanEnv('DRY_RUN', false),
     headless: booleanEnv('HEADLESS', true),
-    notifyWebhookUrl: optional(process.env.NOTIFY_WEBHOOK_URL)
+    notifyWebhookUrl: optional(process.env.NOTIFY_WEBHOOK_URL),
+    emailSmtpHost: optional(process.env.EMAIL_SMTP_HOST) ?? 'smtp.gmail.com',
+    emailSmtpPort: numberEnv('EMAIL_SMTP_PORT', 465),
+    emailSmtpSecure: booleanEnv('EMAIL_SMTP_SECURE', true),
+    emailSmtpUser: optional(process.env.EMAIL_SMTP_USER),
+    emailSmtpPass: optional(process.env.EMAIL_SMTP_PASS),
+    emailFrom: optional(process.env.EMAIL_FROM) ?? optional(process.env.EMAIL_SMTP_USER),
+    emailTo: optional(process.env.EMAIL_TO)
   };
 };
