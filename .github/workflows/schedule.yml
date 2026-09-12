@@ -22,7 +22,6 @@ on:
   schedule:
     # TESTE TEMPORARIO: roda a cada 5 minutos para validar o evento schedule.
     - cron: '*/5 * * * *'
-      timezone: 'America/Sao_Paulo'
 
 concurrency:
   group: barber-booking-bot
