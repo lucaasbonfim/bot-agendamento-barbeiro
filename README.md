@@ -34,14 +34,36 @@ A escolha funciona assim:
 
 ## GitHub Actions
 
-O workflow roda toda sexta às `23:50` no horário de São Paulo:
+O workflow deve ser disparado por `workflow_dispatch`. O `schedule` do GitHub Actions foi removido porque atrasou várias horas mesmo com cron de teste a cada 5 minutos.
 
-```yaml
-- cron: '50 23 * * 5'
-  timezone: 'America/Sao_Paulo'
+Use um cron externo para chamar a API do GitHub toda sexta às `23:50` em `America/Sao_Paulo`.
+
+Endpoint:
+
+```text
+POST https://api.github.com/repos/lucaasbonfim/bot-agendamento-barbeiro/actions/workflows/schedule.yml/dispatches
 ```
 
-O `schedule` do GitHub Actions só dispara na branch padrão e pode atrasar ou ser descartado em períodos de carga alta do GitHub. Por isso o minuto foi mantido fora do `00`.
+Headers:
+
+```text
+Accept: application/vnd.github+json
+Authorization: Bearer SEU_TOKEN_AQUI
+X-GitHub-Api-Version: 2026-03-10
+Content-Type: application/json
+```
+
+Body:
+
+```json
+{
+  "ref": "main",
+  "inputs": {
+    "dry_run": "false",
+    "skip_wait": "false"
+  }
+}
+```
 
 Depois que o job inicia, o bot espera até:
 
@@ -157,15 +179,17 @@ DRY_RUN=false
 SKIP_WAIT=true
 ```
 
-O agendamento automático de sexta usa os defaults de produção do workflow, sem precisar preencher inputs.
+O cron externo de produção deve chamar `workflow_dispatch` com `DRY_RUN=false` e `SKIP_WAIT=false`.
 
 ## Produção
 
-Para o GitHub Actions agendar de verdade:
+Para o agendamento automático funcionar de verdade:
 
 1. Faça push para a branch `main`.
 2. Cadastre os secrets obrigatórios.
 3. Não defina `DRY_RUN=true` nas variables do Actions.
-4. Confira a aba `Actions` no GitHub.
+4. Crie um token fine-grained do GitHub limitado a este repositório com permissão `Actions: Read and write`.
+5. Configure o cron externo para chamar o endpoint de `workflow_dispatch` toda sexta às `23:50`.
+6. Confira a aba `Actions` no GitHub.
 
 Também dá para disparar manualmente pelo botão `Run workflow`.
