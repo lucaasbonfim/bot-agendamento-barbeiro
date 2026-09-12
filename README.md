@@ -34,17 +34,14 @@ A escolha funciona assim:
 
 ## GitHub Actions
 
-O workflow roda toda sexta às `23:50` no horário de São Paulo. Como o GitHub Actions usa UTC, o cron fica:
+O workflow roda toda sexta às `23:50` no horário de São Paulo:
 
 ```yaml
-- cron: '50 2 * * 6'
+- cron: '50 23 * * 5'
+  timezone: 'America/Sao_Paulo'
 ```
 
-Isso significa:
-
-```text
-Sábado 02:50 UTC = sexta 23:50 em America/Sao_Paulo
-```
+O `schedule` do GitHub Actions só dispara na branch padrão e pode atrasar ou ser descartado em períodos de carga alta do GitHub. Por isso o minuto foi mantido fora do `00`.
 
 Depois que o job inicia, o bot espera até:
 

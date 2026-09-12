@@ -20,9 +20,9 @@ on:
           - 'true'
           - 'false'
   schedule:
-    # GitHub Actions usa UTC. Sabado 02:50 UTC = sexta 23:50 em America/Sao_Paulo.
-    # Evite minuto 00 porque horarios cheios podem atrasar mais.
-    - cron: '50 2 * * 6'
+    # Sexta 23:50 em America/Sao_Paulo. Evite minuto 00 porque horarios cheios podem atrasar mais.
+    - cron: '50 23 * * 5'
+      timezone: 'America/Sao_Paulo'
 
 concurrency:
   group: barber-booking-bot
