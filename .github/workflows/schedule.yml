@@ -20,8 +20,8 @@ on:
           - 'true'
           - 'false'
   schedule:
-    # Sexta 23:50 em America/Sao_Paulo. Evite minuto 00 porque horarios cheios podem atrasar mais.
-    - cron: '50 23 * * 5'
+    # TESTE TEMPORARIO: roda a cada 5 minutos para validar o evento schedule.
+    - cron: '*/5 * * * *'
       timezone: 'America/Sao_Paulo'
 
 concurrency:
@@ -77,8 +77,8 @@ jobs:
           WAIT_UNTIL_TIME: ${{ vars.WAIT_UNTIL_TIME || '00:00' }}
           WAIT_GRACE_MINUTES: ${{ vars.WAIT_GRACE_MINUTES || '5' }}
           WAIT_MAX_MINUTES: ${{ vars.WAIT_MAX_MINUTES || '15' }}
-          SKIP_WAIT: ${{ github.event_name == 'workflow_dispatch' && inputs.skip_wait || vars.SKIP_WAIT || 'false' }}
-          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || vars.DRY_RUN || 'false' }}
+          SKIP_WAIT: ${{ github.event_name == 'workflow_dispatch' && inputs.skip_wait || github.event_name == 'schedule' && 'true' || vars.SKIP_WAIT || 'false' }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || github.event_name == 'schedule' && 'true' || vars.DRY_RUN || 'false' }}
           HEADLESS: 'true'
 
       - name: Upload artifacts
