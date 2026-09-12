@@ -21,7 +21,7 @@ on:
           - 'false'
   schedule:
     # TESTE TEMPORARIO: roda a cada 5 minutos para validar o evento schedule.
-    - cron: '*/5 * * * *'
+    - cron: '2/5 * * * *'
 
 concurrency:
   group: barber-booking-bot
